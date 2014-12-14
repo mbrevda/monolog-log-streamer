@@ -1,0 +1,10 @@
+{
+    "name": "mbrevda/log-streamer",
+    "authors": [
+        {
+            "name": "Moshe Brevda",
+            "email": "mbrevda@gmail.com"
+        }
+    ],
+    "require": {}
+}
