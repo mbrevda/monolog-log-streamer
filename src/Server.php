@@ -1,8 +1,8 @@
 <?php
 
-namespace Mbrevda\LogStreamer;
+namespace Mbrevda\LogStream;
 
-class LogStreamer
+class Server
 {
     /**
      * @var socket server
