@@ -29,6 +29,7 @@ class Server
      */
     public function run($address = '')
     {
+        $address = 'tcp://' . $address;
         $this->connect($address);
 
         for (;;) {
