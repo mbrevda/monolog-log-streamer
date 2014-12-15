@@ -69,7 +69,7 @@ class Server
             $msg->message = preg_replace('/^(E_.*?: )/', '', $msg->message);
         }
         
-        $this->callback($msg->message);
+        call_user_func($this->callback, $msg->message);
     }
 
     /**
