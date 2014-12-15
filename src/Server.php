@@ -8,7 +8,7 @@ class Server
      * @var socket server
      */
     private $server;
-    
+
     /**
      * Callback to pass messages to
      *
@@ -68,8 +68,8 @@ class Server
         if (is_string($msg->message)) {
             $msg->message = preg_replace('/^(E_.*?: )/', '', $msg->message);
         }
-        
-        call_user_func($this->callback, $msg->message);
+
+        call_user_func($this->callback, $out . ' ' . $msg->message);
     }
 
     /**
@@ -110,7 +110,7 @@ class Server
                 . ':'
                 . $msg->context->line;
         } else {
-            $msg->location = new \stdClass;
+            $msg->location = '';
         }
 
         return $msg;
