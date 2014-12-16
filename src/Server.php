@@ -36,50 +36,22 @@ class Server
             $stream = stream_socket_accept($this->server, -1);
 
             if ($stream && $msg = $this->getMessage($stream)) {
-                $this->showMessage($this->parseMessage($msg));
+                $this->callback($this->normalizeMessage($msg));
+                
+                unset($msg);
             }
-
+            
         }
     }
 
     /**
-     * Outputs a message
-     *
-     * @param string $msg the mreceived message
-     */
-    private function showMessage($msg)
-    {
-        //print_r($msg);
-        $out = PHP_EOL
-            . '['
-            . $msg->datetime->date
-            . ' '
-            . $msg->channel
-            . '] '
-            . $msg->level_name
-            . ' '
-            . (is_string($msg->location)
-                ? $msg->location
-                : '')
-            . PHP_EOL;
-
-        // monolog insists on hardcoding the php error name in the error text
-        // clean it out here
-        if (is_string($msg->message)) {
-            $msg->message = preg_replace('/^(E_.*?: )/', '', $msg->message);
-        }
-
-        call_user_func($this->callback, $out . ' ' . $msg->message);
-    }
-
-    /**
-     * Parse messages recevied as json
+     * Normalize messages recevied as json, including error checking
      *
      * @param string $msg recevied message
      *
      * @return object the messaged, parsed
      */
-    private function parseMessage($message)
+    private function normalizeMessage($message)
     {
         $message = trim($message);
         $msg = json_decode($message);
@@ -131,8 +103,9 @@ class Server
             throw new \UnexpectedValueException(
                 'Could not bind to socket '. $address . ': ' . $errorMessage
             );
-
         }
+
+        return true;
     }
 
     /**
