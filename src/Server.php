@@ -74,13 +74,10 @@ class Server
             return $msg;
         }
 
-        if (isset($msg->context)
-            && is_object($msg->context)
-            && isset($msg->context->file)
-        ) {
-            $msg->location = $msg->context->file
-                . ':'
-                . $msg->context->line;
+        if (isset($msg->extra, $msg->extra->file)) {
+            $msg->location = $msg->extra->file
+            . ':'
+            . $msg->extra->line;
         } else {
             $msg->location = '';
         }
