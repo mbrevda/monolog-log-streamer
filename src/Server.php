@@ -36,11 +36,11 @@ class Server
             $stream = stream_socket_accept($this->server, -1);
 
             if ($stream && $msg = $this->getMessage($stream)) {
-                $this->callback($this->normalizeMessage($msg));
-                
+                call_user_func($this->callback, $this->normalizeMessage($msg));
+
                 unset($msg);
             }
-            
+
         }
     }
 
