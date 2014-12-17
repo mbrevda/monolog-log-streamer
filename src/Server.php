@@ -32,15 +32,13 @@ class Server
         $address = 'tcp://' . $address;
         $this->connect($address);
 
-        for (;;) {
-            $stream = stream_socket_accept($this->server, -1);
-
-            if ($stream && $msg = $this->getMessage($stream)) {
+        while (true) {
+            // read socket, and then close it immediatly
+            while ($socket = stream_socket_accept($this->server, -1)) {
+                $msg = $this->getMessage($socket);
                 call_user_func($this->callback, $this->normalizeMessage($msg));
-
-                unset($msg);
+                fclose($socket);
             }
-
         }
     }
 
@@ -53,6 +51,7 @@ class Server
      */
     private function normalizeMessage($message)
     {
+        //var_dump($message);
         $message = trim($message);
         $msg = json_decode($message);
         $err = json_last_error_msg();
@@ -115,8 +114,8 @@ class Server
     private function getMessage($stream)
     {
         $contents = '';
-        while (!feof($stream)) {
-            $contents .= fread($stream, 8192);
+        if (!feof($stream)) {
+            $contents .= fgets($stream, 1000000);
         }
 
         return $contents;
